@@ -3,8 +3,9 @@ package com.movieDB.movieDB.model;
 import lombok.Builder;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Builder
@@ -16,9 +17,8 @@ public class Movie {
 
     private String language;
     private String title;
-
-    private double voteAverage;
-    private int voteCount;
+    private Double voteAverage;
+    private Integer voteCount;
 
     @Column(length = 3000)
     private String overview;
@@ -30,14 +30,14 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
 
-    private Date releaseDate;
-    private Integer popularity;
+    private LocalDate releaseDate;
+    private Long popularity;
 
     public Movie() {
     }
 
-    public Movie(Long id, String language, String title, double voteAverage, int voteCount,
-                 String overview, List<Genre> genres, Date releaseDate, Integer popularity) {
+    public Movie(Long id, String language, String title, Double voteAverage, Integer voteCount,
+                 String overview, List<Genre> genres, LocalDate releaseDate, Long popularity) {
         this.id = id;
         this.language = language;
         this.title = title;
@@ -77,19 +77,19 @@ public class Movie {
         this.title = title;
     }
 
-    public double getVoteAverage() {
+    public Double getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(double voteAverage) {
+    public void setVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
     }
 
-    public int getVoteCount() {
+    public Integer getVoteCount() {
         return voteCount;
     }
 
-    public void setVoteCount(int voteCount) {
+    public void setVoteCount(Integer voteCount) {
         this.voteCount = voteCount;
     }
 
@@ -101,27 +101,29 @@ public class Movie {
         this.overview = overview;
     }
 
-    public List<Genre> getGenres() {
-        return genres;
+    public List<String> getGenres() {
+        return genres.stream()
+                .map(Genre::getName)
+                .collect(Collectors.toList());
     }
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
     }
 
-    public Date getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 
-    public Integer getPopularity() {
+    public Long getPopularity() {
         return popularity;
     }
 
-    public void setPopularity(Integer popularity) {
+    public void setPopularity(Long popularity) {
         this.popularity = popularity;
     }
 
@@ -134,7 +136,6 @@ public class Movie {
                 ", voteAverage=" + voteAverage +
                 ", voteCount=" + voteCount +
                 ", overview='" + overview + '\'' +
-                ", genres=" + genres +
                 ", releaseDate=" + releaseDate +
                 ", popularity=" + popularity +
                 '}';

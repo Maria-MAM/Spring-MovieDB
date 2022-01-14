@@ -1,15 +1,13 @@
 package com.movieDB.movieDB.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.Column;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-@JsonDeserialize(using = MovieAPIResponseDeserializer.class)
 public class MovieAPIResponse implements Serializable {
 
     private static final long serialVersionUID = 100L;
@@ -20,21 +18,30 @@ public class MovieAPIResponse implements Serializable {
 
     @Column(length = 3000)
     private String overview;
+
+    @JsonDeserialize(using = MoviePopularityDeserializer.class)
     private Long popularity;
-    private Date release_date;
+
+    private LocalDate release_date;
     private String title;
 
-    @JsonProperty("vote-average")
-    private double voteAverage;
+    @JsonProperty("vote_average")
+    private Double voteAverage;
 
-    @JsonProperty("vote-count")
-    private int voteCount;
+    @JsonProperty("vote_count")
+    private Integer voteCount;
 
     public MovieAPIResponse() {
     }
 
-    public MovieAPIResponse(  Long popularity, double voteAverage, int voteCount) {
+    public MovieAPIResponse(List<Long> genre_ids, String original_language, String overview, Long popularity,
+                            LocalDate release_date, String title, Double voteAverage, Integer voteCount) {
+        this.genre_ids = genre_ids;
+        this.original_language = original_language;
+        this.overview = overview;
         this.popularity = popularity;
+        this.release_date = release_date;
+        this.title = title;
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
     }
@@ -79,11 +86,11 @@ public class MovieAPIResponse implements Serializable {
         this.popularity = popularity;
     }
 
-    public Date getRelease_date() {
+    public LocalDate getRelease_date() {
         return release_date;
     }
 
-    public void setRelease_date(Date release_date) {
+    public void setRelease_date(LocalDate release_date) {
         this.release_date = release_date;
     }
 
@@ -95,19 +102,19 @@ public class MovieAPIResponse implements Serializable {
         this.title = title;
     }
 
-    public double getVoteAverage() {
+    public Double getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(double voteAverage) {
+    public void setVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
     }
 
-    public int getVoteCount() {
+    public Integer getVoteCount() {
         return voteCount;
     }
 
-    public void setVoteCount(int voteCount) {
+    public void setVoteCount(Integer voteCount) {
         this.voteCount = voteCount;
     }
 

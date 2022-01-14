@@ -1,8 +1,6 @@
 package com.movieDB.movieDB.model;
 
 import lombok.Builder;
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -55,7 +53,6 @@ public class Genre {
         return "Genre{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", movies=" + movies +
                 '}';
     }
 }
