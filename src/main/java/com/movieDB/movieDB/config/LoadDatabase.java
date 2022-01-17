@@ -1,8 +1,5 @@
 package com.movieDB.movieDB.config;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.*;
 import com.movieDB.movieDB.model.*;
 import com.movieDB.movieDB.repositories.GenreRepository;
@@ -13,12 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 @Configuration
@@ -72,7 +65,7 @@ class LoadDatabase {
                                 .popularity(movieResponse.getPopularity())
                                 .genres(movieGenreList)
                                 .build();
-                        movieRepository.saveAndFlush(movie);
+                        movieRepository.save(movie);
                     }
                 }
             }
