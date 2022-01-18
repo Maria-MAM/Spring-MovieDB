@@ -32,7 +32,6 @@ public class MovieController {
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "3") int size) {
 
-        List<Movie> movies = new ArrayList<Movie>();
         Pageable paging = PageRequest.of(page, size);
         Page<Movie> pageMovies;
         if (movieTitle == null) {
@@ -41,13 +40,7 @@ public class MovieController {
             pageMovies = movieRepository.findByTitleContaining(movieTitle, paging);
         }
 
-        movies = pageMovies.getContent();
-        Map<String, Object> response = new HashMap<>();
-        response.put("movies", movies);
-        response.put("currentPage", pageMovies.getNumber());
-        response.put("totalItems", pageMovies.getTotalElements());
-        response.put("totalPages", pageMovies.getTotalPages());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(populateResponse(pageMovies), HttpStatus.OK);
     }
 
     @GetMapping(value = "/searchByTitleAndGenre")
@@ -56,7 +49,6 @@ public class MovieController {
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "3") int size) {
 
-        List<Movie> movies = new ArrayList<Movie>();
         Pageable paging = PageRequest.of(page, size);
         Page<Movie> pageMovies;
         if (movieTitle == null || genre == null || movieTitle.isBlank()) {
@@ -67,13 +59,17 @@ public class MovieController {
             pageMovies = movieRepository.findByTitleContainingAndGenresId(movieTitle, genreRepository.findByNameContaining(genre).getId(), paging);
         }
 
+        return new ResponseEntity<>(populateResponse(pageMovies), HttpStatus.OK);
+    }
+
+    private Map<String, Object> populateResponse(Page<Movie> pageMovies) {
+        List<Movie> movies = new ArrayList<Movie>();
         movies = pageMovies.getContent();
         Map<String, Object> response = new HashMap<>();
         response.put("movies", movies);
         response.put("currentPage", pageMovies.getNumber());
         response.put("totalItems", pageMovies.getTotalElements());
         response.put("totalPages", pageMovies.getTotalPages());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
-
 }
