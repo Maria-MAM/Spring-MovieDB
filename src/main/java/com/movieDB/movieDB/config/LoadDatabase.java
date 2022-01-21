@@ -9,7 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
@@ -20,16 +19,18 @@ import java.util.Objects;
 class LoadDatabase {
     private static final RestTemplate REST_TEMPLATE = new RestTemplate();
 
-    private final String API_KEY = "77832adee6b2234e1c947a27955ac49e";
-
-    private String movieURI = "https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=popularity.desc&" +
-            "include_video=false&vote_count.gte=100&vote_average.gte=8&with_original_language=en&include_adult=false&" +
-            "with_watch_monetization_types=flatrate&api_key=" + API_KEY + "&page=";
-
-    private String genreURI = "https://api.themoviedb.org/3/genre/movie/list?api_key=" + API_KEY + "&language=en-US";
+    @Value("${movieDB.API_KEY}")
+    private String API_KEY;
 
     @Bean
     CommandLineRunner initDatabase(MovieRepository movieRepository, GenreRepository genreRepository) {
+
+        String movieURI = "https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=popularity.desc&" +
+                "include_video=false&vote_count.gte=100&vote_average.gte=8&with_original_language=en&include_adult=false&" +
+                "with_watch_monetization_types=flatrate&api_key=" + API_KEY + "&page=";
+
+        String genreURI = "https://api.themoviedb.org/3/genre/movie/list?api_key=" + API_KEY + "&language=en-US";
+
         return args -> {
 //            populate genre table
             GenreListAPIResponse genreList = REST_TEMPLATE.getForObject(genreURI, GenreListAPIResponse.class);

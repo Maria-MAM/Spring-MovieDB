@@ -3,6 +3,7 @@ package com.movieDB.movieDB.model;
 import lombok.Builder;
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Builder
@@ -40,8 +41,10 @@ public class Genre {
         this.name = name;
     }
 
-    public List<Movie> getMovies() {
-        return movies;
+    public List<String> getMovies() {
+        return movies.stream()
+                .map(Movie::getTitle)
+                .collect(Collectors.toList());
     }
 
     public void setMovies(List<Movie> movies) {
