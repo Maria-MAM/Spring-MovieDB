@@ -1,0 +1,11 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Authentication</title>
+</head>
+<body>
+<h1 th:text="'Welcome, ' + ${username} + '!'"></h1>
+<ul>
+    <li th:if="${lastAccess}" th:text="'Last access: ' + ${lastAccess}"></li>
+</ul>
+</body>
+</html>
