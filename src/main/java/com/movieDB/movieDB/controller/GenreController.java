@@ -29,7 +29,7 @@ public class GenreController {
     }
 
     @GetMapping(value = "/searchByName")
-    private ResponseEntity<Map<String, Object>> searchGenreByName(@RequestParam("genreName") String genreName,
+    public ResponseEntity<Map<String, Object>> searchGenreByName(@RequestParam("genreName") String genreName,
                                                                    @RequestParam(defaultValue = "0") int page,
                                                                    @RequestParam(defaultValue = "3") int size) {
 
