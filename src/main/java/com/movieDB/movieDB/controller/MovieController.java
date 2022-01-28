@@ -1,5 +1,6 @@
 package com.movieDB.movieDB.controller;
 
+import com.movieDB.movieDB.exception.MovieNotFoundException;
 import com.movieDB.movieDB.model.Movie;
 import com.movieDB.movieDB.repositories.GenreRepository;
 import com.movieDB.movieDB.repositories.MovieRepository;
@@ -45,12 +46,7 @@ public class MovieController {
                                                                 @RequestParam(defaultValue = "3") int size) {
 
         Pageable paging = PageRequest.of(page, size);
-        Page<Movie> pageMovies;
-        if (movieTitle == null) {
-            pageMovies = movieRepository.findAll(paging);
-        } else {
-            pageMovies = movieRepository.findByTitleContaining(movieTitle, paging);
-        }
+        Page<Movie> pageMovies = movieRepository.findByTitleContaining(movieTitle, paging);
         return new ResponseEntity<>(populateResponse(pageMovies), HttpStatus.OK);
     }
 
@@ -62,9 +58,8 @@ public class MovieController {
 
         Pageable paging = PageRequest.of(page, size);
         Page<Movie> pageMovies;
-        if (movieTitle == null || genre == null || movieTitle.isBlank()) {
-            pageMovies = movieRepository.findAll(paging);
-        } else if (genre.isBlank()) {
+
+        if (genre.isBlank()) {
             pageMovies = movieRepository.findByTitleContaining(movieTitle, paging);
         } else {
             pageMovies = movieRepository
@@ -85,7 +80,11 @@ public class MovieController {
     }
 
     private Map<String, Object> populateResponse(Page<Movie> pageMovies) {
+
         List<Movie> movies = pageMovies.getContent();
+
+        if (movies.size() == 0) throw new MovieNotFoundException();
+
         Map<String, Object> response = new HashMap<>();
         response.put("movies", movies);
         response.put("currentPage", pageMovies.getNumber());

@@ -8,6 +8,7 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: notSecureChangeMe
+      MYSQL_DATABASE: movieDB
 
   # URL: localhost:8181
   # credentials:

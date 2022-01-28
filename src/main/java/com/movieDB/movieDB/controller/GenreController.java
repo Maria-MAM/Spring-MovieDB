@@ -1,5 +1,7 @@
 package com.movieDB.movieDB.controller;
 
+import com.movieDB.movieDB.exception.GenreNotFoundException;
+import com.movieDB.movieDB.exception.MovieNotFoundException;
 import com.movieDB.movieDB.model.Genre;
 import com.movieDB.movieDB.repositories.GenreRepository;
 import com.movieDB.movieDB.repositories.MovieRepository;
@@ -34,19 +36,16 @@ public class GenreController {
                                                                    @RequestParam(defaultValue = "3") int size) {
 
         Pageable paging = PageRequest.of(page, size);
-        Page<Genre> pageGenre;
-        if (genreName == null) {
-            pageGenre = genreRepository.findAll(paging);
-        } else {
-            pageGenre = genreRepository.findByNameContaining(genreName, paging);
-        }
+        Page<Genre> pageGenre = genreRepository.findByNameContaining(genreName, paging);
 
         return new ResponseEntity<>(populateResponse(pageGenre), HttpStatus.OK);
     }
 
     private Map<String, Object> populateResponse(Page<Genre> pageGenre) {
-        List<Genre> genres = new ArrayList<Genre>();
-        genres = pageGenre.getContent();
+        List<Genre> genres =  pageGenre.getContent();
+
+        if (genres.size() == 0) throw new GenreNotFoundException();
+
         Map<String, Object> response = new HashMap<>();
         response.put("genres", genres);
         response.put("currentPage", pageGenre.getNumber());
