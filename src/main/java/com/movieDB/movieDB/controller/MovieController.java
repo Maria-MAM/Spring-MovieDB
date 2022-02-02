@@ -1,10 +1,12 @@
 package com.movieDB.movieDB.controller;
 
+import com.movieDB.movieDB.exception.GenreNotFoundException;
 import com.movieDB.movieDB.exception.MovieNotFoundException;
 import com.movieDB.movieDB.model.Movie;
 import com.movieDB.movieDB.repositories.GenreRepository;
 import com.movieDB.movieDB.repositories.MovieRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -61,6 +63,8 @@ public class MovieController {
 
         if (genre.isBlank()) {
             pageMovies = movieRepository.findByTitleContaining(movieTitle, paging);
+        } else if (genreRepository.findByNameContaining(genre) == null) {
+            throw new GenreNotFoundException();
         } else {
             pageMovies = movieRepository
                     .findByTitleContainingAndGenresId(movieTitle, genreRepository.findByNameContaining(genre).getId(), paging);
