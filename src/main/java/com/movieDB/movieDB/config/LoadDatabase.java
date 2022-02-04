@@ -60,8 +60,8 @@ class LoadDatabase {
 
                         Movie movie = Movie.builder()
                                 .language(movieResponse.getOriginal_language())
-                                .overview(movieResponse.getOverview().replaceAll("[^a-zA-Z0-9 ]", ""))
-                                .title(movieResponse.getTitle().replaceAll("[^a-zA-Z0-9 ]", ""))
+                                .overview(movieResponse.getOverview())
+                                .title(movieResponse.getTitle())
                                 .voteCount(movieResponse.getVoteCount())
                                 .voteAverage(movieResponse.getVoteAverage())
                                 .releaseDate(movieResponse.getRelease_date())
