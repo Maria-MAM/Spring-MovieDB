@@ -37,8 +37,11 @@ public class MovieController {
     public ResponseEntity<Map<String, Object>> getAllMovies(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "3") int size) {
 
-        Pageable paging = PageRequest.of(page, size);
-        Page<Movie> pageMovies = movieRepository.findAll(paging);
+        Pageable paging = PageRequest.of(0, 3);
+        Page<Movie> pageMovies;
+        if (movieRepository.findAll(paging) != null) {
+            pageMovies = movieRepository.findAll(paging);
+        } else throw new RuntimeException("-------instead of null pointer expception-----");
 
         return new ResponseEntity<>(populateResponse(pageMovies), HttpStatus.OK);
     }
