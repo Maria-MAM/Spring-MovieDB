@@ -33,6 +33,7 @@ public class MovieController {
     }
 
     @GetMapping(value = "/all")
+    @CrossOrigin(origins = "http://localhost:8080")
     public ResponseEntity<Map<String, Object>> getAllMovies(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "3") int size) {
 
