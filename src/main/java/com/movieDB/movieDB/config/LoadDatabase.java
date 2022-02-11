@@ -34,6 +34,8 @@ class LoadDatabase {
         return args -> {
 //            populate genre table
             GenreListAPIResponse genreList = REST_TEMPLATE.getForObject(genreURI, GenreListAPIResponse.class);
+
+            assert genreList != null;
             for ( GenreAPIResponse genreResponse : genreList.getGenres()) {
                 if (!(genreResponse == null)) {
                     Genre genre = Genre.builder()
@@ -51,6 +53,7 @@ class LoadDatabase {
                 String movieURIPage = movieURI + i;
                 MovieListAPIResponse resultList = REST_TEMPLATE.getForObject(movieURIPage, MovieListAPIResponse.class);
 
+                assert resultList != null;
                 for (MovieAPIResponse movieResponse : resultList.getResults()) {
                     if (!(movieResponse == null)) {
                         List<Genre> movieGenreList = new ArrayList<>();
@@ -68,7 +71,7 @@ class LoadDatabase {
                                 .popularity(movieResponse.getPopularity())
                                 .genres(movieGenreList)
                                 .build();
-                        movieRepository.save(movie);
+                        movieRepository.saveAndFlush(movie);
                     }
                 }
             }
