@@ -11,8 +11,8 @@ Populate a DB with entries from The Movie Database API - https://developers.them
 <h2>Features</h2>
 <h3>Movie</h3>
 <table>
-<thead><tr><th>Operation</th><th align="center">Description</th>
-<th align="right">Example</th><th align="right">Request body</th>
+<thead><tr><th>Operation</th><th>Description</th>
+<th>Example</th><th>Request body</th>
 </tr></thead><tbody>
 <tr>
 <td>GET</td>
@@ -27,8 +27,8 @@ Populate a DB with entries from The Movie Database API - https://developers.them
 <td>-</td></tr></tbody></table>
 <h3>Genre</h3>
 <table>
-<thead><tr><th>Operation</th><th align="center">Description</th>
-<th>Example</th><th align="right">Request body</th>
-</tr></thead><tbody><tr><td>GET</td><td align="center">Get a genre by name</td>
+<thead><tr><th>Operation</th><th>Description</th>
+<th>Example</th><th>Request body</th>
+</tr></thead><tbody><tr><td>GET</td><td>Get a genre by name</td>
 <td>localhost:8080/genres/searchByName?genreName=documentary</td>
 <td>-</td></tr></tbody></table></div>
