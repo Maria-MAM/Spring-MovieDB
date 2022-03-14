@@ -2,7 +2,8 @@
 
 Populate a DB with entries from The Movie Database API - https://developers.themoviedb.org/3/getting-started/introduction
 
-<div class="filebrowser-readme-content markup-content markup"><h4>Movie application</h4>
+<div class="filebrowser-readme-content markup-content markup">
+<h4>Movie application</h4>
 <ul><li><a rel="nofollow" href="#features">Features</a>
 <ul><li><a rel="nofollow" href="#Movie">Movie</a></li>
 <li><a rel="nofollow" href="#genre">Genre</a></li>
