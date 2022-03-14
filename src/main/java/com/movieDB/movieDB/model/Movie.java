@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class Movie {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String language;
@@ -30,7 +30,7 @@ public class Movie {
     @Column(length = 1000)
     private String overview;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "movies_genres",
             joinColumns = @JoinColumn(name = "movie_id"),

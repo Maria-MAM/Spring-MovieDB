@@ -1,12 +1,6 @@
 package com.movieDB.movieDB.controller;
 
-import com.movieDB.movieDB.exception.GenreNotFoundException;
-import com.movieDB.movieDB.exception.MovieNotFoundException;
-import com.movieDB.movieDB.model.Movie;
-import com.movieDB.movieDB.repositories.GenreRepository;
-import com.movieDB.movieDB.repositories.MovieRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import com.movieDB.movieDB.services.MovieService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -16,20 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 
 @RestController
 @RequestMapping("/movies/")
 public class MovieController {
 
-    private final MovieRepository movieRepository;
-    private final GenreRepository genreRepository;
+    private final MovieService movieService;
 
-    public MovieController(MovieRepository movieRepository, GenreRepository genreRepository) {
-        this.movieRepository = movieRepository;
-        this.genreRepository = genreRepository;
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
     }
 
     @GetMapping(value = "/all")
@@ -37,13 +28,8 @@ public class MovieController {
     public ResponseEntity<Map<String, Object>> getAllMovies(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "3") int size) {
 
-        Pageable paging = PageRequest.of(0, 3);
-        Page<Movie> pageMovies;
-        if (movieRepository.findAll(paging) != null) {
-            pageMovies = movieRepository.findAll(paging);
-        } else throw new RuntimeException("-------instead of null pointer expception-----");
-
-        return new ResponseEntity<>(populateResponse(pageMovies), HttpStatus.OK);
+        Pageable paging = PageRequest.of(page, size);
+        return new ResponseEntity<>(movieService.getAllMovies(paging), HttpStatus.OK);
     }
 
     @GetMapping(value = "/searchByTitle")
@@ -52,29 +38,19 @@ public class MovieController {
                                                                 @RequestParam(defaultValue = "3") int size) {
 
         Pageable paging = PageRequest.of(page, size);
-        Page<Movie> pageMovies = movieRepository.findByTitleContaining(movieTitle, paging);
-        return new ResponseEntity<>(populateResponse(pageMovies), HttpStatus.OK);
+        return new ResponseEntity<>(movieService.findMovieByTitle(movieTitle, paging), HttpStatus.OK);
     }
 
     @GetMapping(value = "/searchByTitleAndGenre")
     public EntityModel<Map<String, Object>> searchMovieByTitleAndGenre(@RequestParam("movieTitle") String movieTitle,
-                                                                           @RequestParam("genre") String genre,
+                                                                       @RequestParam("genre") String genre,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "3") int size) {
 
         Pageable paging = PageRequest.of(page, size);
-        Page<Movie> pageMovies;
 
-        if (genre.isBlank()) {
-            pageMovies = movieRepository.findByTitleContaining(movieTitle, paging);
-        } else if (genreRepository.findByNameContaining(genre) == null) {
-            throw new GenreNotFoundException();
-        } else {
-            pageMovies = movieRepository
-                    .findByTitleContainingAndGenresId(movieTitle, genreRepository.findByNameContaining(genre).getId(), paging);
-        }
-
-        EntityModel<Map<String, Object>> resource = EntityModel.of(populateResponse(pageMovies));
+        EntityModel<Map<String, Object>> resource =
+                EntityModel.of(movieService.findMovieByTitleAndGenre(movieTitle, genre, paging));
 
         WebMvcLinkBuilder linkToAllMovies = linkTo(methodOn(this.getClass()).getAllMovies(page, size));
         WebMvcLinkBuilder linkToFilterByTitleMovies = linkTo(methodOn(this.getClass()).searchMovieByTitle(movieTitle, page, size));
@@ -87,17 +63,4 @@ public class MovieController {
         return resource;
     }
 
-    private Map<String, Object> populateResponse(Page<Movie> pageMovies) {
-
-        List<Movie> movies = pageMovies.getContent();
-
-        if (movies.size() == 0) throw new MovieNotFoundException();
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("movies", movies);
-        response.put("currentPage", pageMovies.getNumber());
-        response.put("totalItems", pageMovies.getTotalElements());
-        response.put("totalPages", pageMovies.getTotalPages());
-        return response;
-    }
 }

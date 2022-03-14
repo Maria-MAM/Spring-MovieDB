@@ -1,11 +1,6 @@
 package com.movieDB.movieDB.controller;
 
-import com.movieDB.movieDB.exception.GenreNotFoundException;
-import com.movieDB.movieDB.exception.MovieNotFoundException;
-import com.movieDB.movieDB.model.Genre;
-import com.movieDB.movieDB.repositories.GenreRepository;
-import com.movieDB.movieDB.repositories.MovieRepository;
-import org.springframework.data.domain.Page;
+import com.movieDB.movieDB.services.GenreService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -14,20 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/genres/")
 public class GenreController {
 
-    private final GenreRepository genreRepository;
+    private final GenreService genreService;
 
-    public GenreController(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
+    public GenreController(GenreService genreService) {
+        this.genreService = genreService;
     }
 
     @GetMapping(value = "/searchByName")
@@ -36,21 +27,7 @@ public class GenreController {
                                                                    @RequestParam(defaultValue = "3") int size) {
 
         Pageable paging = PageRequest.of(page, size);
-        Page<Genre> pageGenre = genreRepository.findByNameContaining(genreName, paging);
-
-        return new ResponseEntity<>(populateResponse(pageGenre), HttpStatus.OK);
+        return new ResponseEntity<>(genreService.findGenreByName(genreName, paging), HttpStatus.OK);
     }
 
-    private Map<String, Object> populateResponse(Page<Genre> pageGenre) {
-        List<Genre> genres =  pageGenre.getContent();
-
-        if (genres.size() == 0) throw new GenreNotFoundException();
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("genres", genres);
-        response.put("currentPage", pageGenre.getNumber());
-        response.put("totalItems", pageGenre.getTotalElements());
-        response.put("totalPages", pageGenre.getTotalPages());
-        return response;
-    }
 }
