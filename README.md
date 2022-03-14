@@ -16,19 +16,19 @@ Populate a DB with entries from The Movie Database API - https://developers.them
 </tr></thead><tbody>
 <tr>
 <td>GET</td>
-<td align="center">Get all movies</td>
-<td align="right">localhost:8080/movies/all</td>
-<td align="right">-</td></tr><tr><td>GET</td>
-<td align="center">Get a movie by title</td>
-<td align="right">localhost:8080/movies/searchByTitle?movieTitle=Harry Potter</td>
-<td align="right">-</td></tr><tr><td>GET</td>
-<td align="center">Get a movie by title and genre</td>
-<td align="right">localhost:8080/movies/searchByTitleAndGenre?movieTitle=spider&genre=action</td>
-<td align="right">-</td></tr></tbody></table>
+<td>Get all movies</td>
+<td>localhost:8080/movies/all</td>
+<td>-</td></tr><tr><td>GET</td>
+<td>Get a movie by title</td>
+<td>localhost:8080/movies/searchByTitle?movieTitle=Harry Potter</td>
+<td>-</td></tr><tr><td>GET</td>
+<td>Get a movie by title and genre</td>
+<td>localhost:8080/movies/searchByTitleAndGenre?movieTitle=spider&genre=action</td>
+<td>-</td></tr></tbody></table>
 <h3>Genre</h3>
 <table>
 <thead><tr><th>Operation</th><th align="center">Description</th>
-<th align="right">Example</th><th align="right">Request body</th>
+<th>Example</th><th align="right">Request body</th>
 </tr></thead><tbody><tr><td>GET</td><td align="center">Get a genre by name</td>
-<td align="right">localhost:8080/genres/searchByName?genreName=documentary</td>
-<td align="right">-</td></tr></tbody></table></div>
+<td>localhost:8080/genres/searchByName?genreName=documentary</td>
+<td>-</td></tr></tbody></table></div>
