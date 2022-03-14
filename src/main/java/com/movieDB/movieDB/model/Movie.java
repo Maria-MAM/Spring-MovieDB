@@ -30,7 +30,7 @@ public class Movie {
     @Column(length = 1000)
     private String overview;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "movies_genres",
             joinColumns = @JoinColumn(name = "movie_id"),
